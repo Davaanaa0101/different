@@ -4,34 +4,35 @@ laboratory 5
 SELECT city, COUNT(branchNo) FROM branch
 GROUP BY city;
 
-SELECT sex, COUNT(sex) AS 'Number', 
-MAX(salary) AS 'MaxSalary',
-MIN(salary) AS 'MinSalary' FROM staff
+SELECT sex, COUNT(sex) AS Number, 
+MAX(salary) AS MaxSalary,
+MIN(salary) AS MinSalary FROM staff
 GROUP BY sex;
 
-SELECT positionn, sex, COUNT(sex) FROM staff
-GROUP BY positionn, sex 
+SELECT position1, sex, COUNT(sex) FROM staff
+GROUP BY position1, sex 
 ORDER BY COUNT(sex) DESC;
 
-SELECT positionn,
+SELECT position1,
 AVG(salary)/2 AS 'Half avg salary'
 FROM staff
-GROUP BY positionn
-ORDER BY positionn DESC;
+GROUP BY position1
+ORDER BY position1 DESC;
 
 SELECT branchNO, COUNT(branchNo) AS 'Workers', SUM(salary) AS 'Sum of salaries' FROM staff
 GROUP BY branchNo
 HAVING COUNT(branchNo)>1;
 
-SELECT *, COUNT(city) AS 'Number of Property' FROM propertyforrent
-WHERE typee = 'flat'
-HAVING COUNT(city)>2; 
+SELECT *, COUNT(type1) AS 'Number of Property' FROM propertyforrent
+WHERE type1 = 'flat'
+group by city
+HAVING COUNT(type1)>2;
 
-SELECT staffNo, fName, IName, DOB FROM staff
+SELECT staffNo, fName, lName, DOB FROM staff
 WHERE branchNo IN (SELECT branchNo FROM branch WHERE city = 'London')
-GROUP BY fName, IName;
+GROUP BY fName, lName;
 
-SELECT fName, IName, positionn, 
+SELECT fName, lName, position1, 
 salary-(SELECT AVG(salary) FROM staff) AS 'diffSalary' 
 FROM staff
 WHERE salary >(SELECT AVG(salary) FROM staff);
@@ -40,23 +41,36 @@ SELECT * FROM propertyforrent
 WHERE staffNo IN (SELECT staffNo FROM staff WHERE city = 'Glasgow');
 
 SELECT * FROM propertyforrent
-WHERE rent < (SELECT MIN(rent) FROM propertyforrent WHERE ownerNo = (SELECT ownerNo FROM privateOwner WHERE fname = 'Carol'));
+WHERE rent < any(SELECT rent FROM propertyforrent WHERE ownerNo = (SELECT ownerNo FROM privateOwner WHERE fname = 'Carol'));
 
 SELECT * FROM propertyforrent
 WHERE rent > (SELECT MAX(rent) FROM propertyforrent WHERE ownerNo = (SELECT ownerNo FROM privateowner WHERE fname = 'Tony'));
 
 SELECT * FROM propertyforrent
-INNER JOIN clientt ON
+INNER JOIN client1 ON
 rent >= maxRent
-AND Typee = prefType;
+AND Type1 = prefType;
 
-SELECT clientt.`fName`, branchNo, staffNo FROM Registration
-INNER JOIN clientt ON
-Registration.`clientNo` = clientt.`clientNo` 
-ORDER BY branchNo, clientt.`fName`;
+SELECT client1.`fName`, branchNo, staffNo FROM Registration
+INNER JOIN client1 ON
+Registration.`clientNo` = client1.`clientNo` 
+ORDER BY branchNo, client1.`fName`;
 
-SELECT fname, positionn, branch.`postcode` FROM staff
-INNER JOIN branch ON
-(SELECT branchNo FROM branch WHERE city = 'London') = staff.`branchNo`
-OR (SELECT branchNo FROM branch WHERE city = 'Glasgow') = staff.`branchNo`
+SELECT fname, position1, branch.`postcode` 
+FROM staff
+left join branch ON
+branch.branchNo = staff.branchNo
+where branch.city = 'London' or branch.city = 'Glasgow'
 ORDER BY DOB;
+
+SELECT propertyforrent.*, viewing.comment1
+FROM propertyforrent, viewing
+WHERE viewing.comment1 != " " && propertyforrent.propertyNo = viewing.propertyNo;
+
+SELECT staff.* 
+from staff
+left join propertyforrent on
+staff.staffNo = PropertyForRent.staffNo
+where PropertyForRent.rooms = 3 and staff.sex = 'M';
+
+
