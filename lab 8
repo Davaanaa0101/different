@@ -1,0 +1,35 @@
+--task1--
+SELECT * FROM staff
+WHERE
+    staff.branchNo =(
+    SELECT registration.branchNo FROM registration
+    WHERE registration.datejoined = '2004-01-02'
+);
+--task2--
+SELECT * FROM client1
+WHERE
+    client1.clientNo = ANY(
+    SELECT viewing.clientNo FROM viewing
+    WHERE viewing.viewDate LIKE '2004-04-%'
+);
+--task3--
+SELECT fName, lName
+FROM staff
+UNION SELECT fName, lName FROM client1
+UNION SELECT fName, lName FROM privateowner
+GROUP BY fName, lname;
+
+--task4--
+SELECT fname, lname, telNo FROM client1
+WHERE telNo LIKE '%22%'
+UNION SELECT fname, lname, telNo FROM privateowner
+WHERE telNo LIKE '%22%';
+
+--task5--
+SELECT client1.`fName`, client1.`lName`, viewing.propertyNo, viewing.`viewDate`, viewing.`comment1` FROM viewing, client1
+WHERE client1.`clientNo` = viewing.`clientNo`
+GROUP BY viewDate;
+
+--task6--
+SELECT city FROM branch
+WHERE branch.city = ANY(SELECT PropertyForRent.`city` FROM PropertyForRent)
