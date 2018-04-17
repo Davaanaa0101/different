@@ -1,0 +1,24 @@
+lab 10 continue
+------------------------------------------------------
+SELECT majorNo, COUNT(lessonNo) AS count1 FROM lessRel
+GROUP BY majorNo;
+
+SELECT studMaj, COUNT(studMaj) AS count1 FROM stud
+GROUP BY studMaj, doe
+ORDER BY studMaj ASC;
+
+SELECT * FROM lessRel
+WHERE majorNo = (SELECT studMaj FROM stud WHERE lname = 'Bataa');
+
+SELECT * FROM chLesson
+WHERE studNo = (SELECT studNo FROM stud WHERE lname = 'Bataa');
+
+SELECT lessonNo, COUNT(lessonNo), AVG(o1+o2+o3) FROM chLesson 
+GROUP BY lessonNo;
+
+SELECT lessonNo, MAX(o1+o2+o3), MIN(o1+o2+o3), AVG(o1+o2+o3) FROM chLesson
+WHERE chLesson.`chYear` = 2016 AND chLesson.`chSeason` = 1
+GROUP BY lessonNo
+
+SELECT studNo FROM chLesson
+WHERE o1+o2+o3 <= 70
