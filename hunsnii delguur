@@ -1,0 +1,38 @@
+CREATE TABLE Baraa(
+	BarCode INT;
+	bname VARCHAR(20);
+	une INT;
+);
+
+INSERT INTO Baraa(BarCode, bname, une)
+VALUES (0001,talh,1200),
+	(0002,talh2,1400),
+	(0003,maslo,2400),
+	(0004,chiher,5000),
+	(0005,tumnii,2700),
+	(0006,bidnii,2000),
+	(0007,husliin,1000);
+
+CREATE TABLE workers(
+	staffNo INT;
+	iname VARCHAR(20);
+	lname VARCHAR(20);
+	age INT;
+	telnumber INT;
+	sex INT;
+	wposition VARCHAR(20);
+);
+
+INSERT INTO workers(staffNo, iname, lname, age, telnumber, sex, wposition)
+VALUES (01,davaa,galaa,19,88008800,1,casher),
+	(02,mandaa,dulmaa,29,99787066,0,manager),
+	(03,gambi,tulgaa,35,99778855,1,casher),
+	(04,telmuun,nasrai,30,98787672,1,supporter),
+	(05,gumba,maalai,25,97654532,1,supporter);
+
+CREATE TABLE workday(
+	days VARCHAR(20);
+	staffNo INT;
+	whour INT;
+);
+
